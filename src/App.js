@@ -1,38 +1,26 @@
-import { useEffect, useState } from "react";
-import { movieApi } from "./api";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { Footer } from "./components/Footer";
+import { Header } from "./components/Header";
+import { NotFound } from "./components/NotFound";
+import { Detail } from "./screens/detail/Detail";
+import { Home } from "./screens/home/Home";
+import { Search } from "./screens/search/Search";
+import { GlobalStyled } from "./styles";
 
 const App = () => {
-  const [nowPlayingData, setNowPlayingData] = useState();
-  const [popData, setPopData] = useState();
-  const [upComingData, setUpComingData] = useState();
-
-  useEffect(() => {
-    const movieData = async () => {
-      const {
-        data: { results: nowPlayingResult },
-      } = await movieApi.nowPlaying();
-      // console.log(await movieApi.nowPlaying());
-      // console.log(results);
-      setNowPlayingData(nowPlayingResult);
-
-      const {
-        data: { results: popularResult },
-      } = await movieApi.popular();
-      setPopData(popularResult);
-
-      const {
-        data: { results: upComingResult },
-      } = await movieApi.upComing();
-      setUpComingData(upComingResult);
-    };
-    movieData();
-  }, []);
-
-  console.log("현재 상영:", nowPlayingData);
-  console.log("인기 영화:", popData);
-  console.log("개봉 예정:", upComingData);
-
-  return <div></div>;
+  return (
+    <Router>
+      <GlobalStyled />
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/detail/:id/*" element={<Detail />} />
+        <Route path="/search/*" element={<Search />} />
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
+      <Footer />
+    </Router>
+  );
 };
 
 export default App;
