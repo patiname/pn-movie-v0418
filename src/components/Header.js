@@ -12,6 +12,7 @@ const SHeader = styled.header`
   top: 0;
   left: 0;
   padding: ${mainStyle.padding};
+  z-index: 10;
 `;
 
 const Logo = styled.h3`

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { movieApi } from "../../api";
-
-const MainBanner = styled.div`
-  height: 80vh;
-  background-color: gray;
-`;
-
-const Title = styled.h3``;
-
-const Desc = styled.p``;
+import { Loading } from "../../components/Loading";
+import { Section } from "../../components/Section";
+import { MainBanner } from "./MainBanner";
+import { Movies } from "./Movies";
 
 export const Home = () => {
   const [nowPlayingData, setNowPlayingData] = useState();
   const [popData, setPopData] = useState();
   const [upComingData, setUpComingData] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const movieData = async () => {
@@ -34,6 +30,8 @@ export const Home = () => {
         data: { results: upComingResult },
       } = await movieApi.upComing();
       setUpComingData(upComingResult);
+
+      setLoading(false);
     };
     movieData();
   }, []);
@@ -41,19 +39,22 @@ export const Home = () => {
   console.log("현재 상영:", nowPlayingData);
   console.log("인기 영화:", popData);
   console.log("개봉 예정:", upComingData);
+
   return (
     <div>
-      {nowPlayingData ? (
-        <MainBanner
-          style={{
-            background: `url(https://image.tmdb.org/t/p/original${nowPlayingData[0].backdrop_path}) no-repeat center / cover`,
-          }}
-        >
-          <Title></Title>
-          <Desc></Desc>
-        </MainBanner>
+      {loading ? (
+        <Loading />
       ) : (
-        "loading"
+        nowPlayingData && (
+          <>
+            <MainBanner data={nowPlayingData} />
+            <Section>
+              <Movies title={"현재 상영 영화"} data={nowPlayingData} />
+              <Movies title={"인기 영화"} data={popData} />
+              <Movies title={"개봉 예정"} data={upComingData} />
+            </Section>
+          </>
+        )
       )}
     </div>
   );
