@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 const SSection = styled.section`
   padding: 0 60px;
+  @media screen and (max-width: 500px) {
+    padding: 0 20px;
+  }
 `;
 
 export const Section = ({ children }) => {

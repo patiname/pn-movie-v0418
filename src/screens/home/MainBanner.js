@@ -5,6 +5,9 @@ const SMainBanner = styled.div`
   background-color: gray;
   padding: 350px 60px;
   position: relative;
+  @media screen and (max-width: 500px) {
+    padding: 280px 20px;
+  }
 `;
 
 const Title = styled.h3`
@@ -15,6 +18,9 @@ const Title = styled.h3`
   margin-bottom: 20px;
   position: relative;
   z-index: 9;
+  @media screen and (max-width: 500px) {
+    font-size: 50px;
+  }
 `;
 
 const Desc = styled.p`
@@ -25,6 +31,9 @@ const Desc = styled.p`
   position: relative;
   z-index: 9;
   opacity: 0.7;
+  @media screen and (max-width: 500px) {
+    font-size: 16px;
+  }
 `;
 
 const BlackBg = styled.div`

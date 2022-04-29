@@ -13,6 +13,9 @@ const SHeader = styled.header`
   left: 0;
   padding: ${mainStyle.padding};
   z-index: 10;
+  @media screen and (max-width: 500px) {
+    padding: 20px;
+  }
 `;
 
 const Logo = styled.h3`
