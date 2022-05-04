@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { movieApi } from "../../api";
 import { Section } from "../../components/Section";
 
 const DetailContainer = styled.div`
@@ -6,9 +8,20 @@ const DetailContainer = styled.div`
 `;
 
 export const Detail = () => {
+  const [detailData, setDetailData] = useState();
+
+  useEffect(() => {
+    const movieData = async () => {
+      const name = await movieApi.detail(414906);
+      setDetailData(name);
+    };
+    movieData();
+  }, []);
+  console.log(detailData);
+
   return (
     <Section>
-      <DetailContainer>Detail</DetailContainer>
+      <DetailContainer></DetailContainer>
     </Section>
   );
 };

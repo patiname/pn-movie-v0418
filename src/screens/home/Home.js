@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { movieApi } from "../../api";
 import { Loading } from "../../components/Loading";
@@ -7,6 +8,9 @@ import { MainBanner } from "./MainBanner";
 import { Movies } from "./Movies";
 
 export const Home = () => {
+  const navgate = useNavigate();
+  // =>페이지 경로를 변경하는 훅
+
   const [nowPlayingData, setNowPlayingData] = useState();
   const [popData, setPopData] = useState();
   const [upComingData, setUpComingData] = useState();
@@ -14,24 +18,28 @@ export const Home = () => {
 
   useEffect(() => {
     const movieData = async () => {
-      const {
-        data: { results: nowPlayingResult },
-      } = await movieApi.nowPlaying();
-      // console.log(await movieApi.nowPlaying());
-      // console.log(results);
-      setNowPlayingData(nowPlayingResult);
+      try {
+        const {
+          data: { results: nowPlayingResult },
+        } = await movieApi.nowPlaying();
+        // console.log(await movieApi.nowPlaying());
+        // console.log(results);
+        setNowPlayingData(nowPlayingResult);
 
-      const {
-        data: { results: popularResult },
-      } = await movieApi.popular();
-      setPopData(popularResult);
+        const {
+          data: { results: popularResult },
+        } = await movieApi.popular();
+        setPopData(popularResult);
 
-      const {
-        data: { results: upComingResult },
-      } = await movieApi.upComing();
-      setUpComingData(upComingResult);
+        const {
+          data: { results: upComingResult },
+        } = await movieApi.upComing();
+        setUpComingData(upComingResult);
 
-      setLoading(false);
+        setLoading(false);
+      } catch (error) {
+        navgate("/*");
+      }
     };
     movieData();
   }, []);
