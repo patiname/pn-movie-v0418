@@ -48,8 +48,18 @@ const Payload = styled.p`
   opacity: 0.7;
 `;
 
+const VideoWrap = styled.div`
+  margin-top: 150px;
+`;
+
+const Iframe = styled.iframe`
+  width: 100%;
+  height: 60vh;
+`;
+
 export const Detail = () => {
   const [detailData, setDetailData] = useState();
+  const [videoKey, setVideoKey] = useState();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   // =>url 주소의 변수값을 가져옴
@@ -58,11 +68,18 @@ export const Detail = () => {
     const movieData = async () => {
       const { data } = await movieApi.detail(id);
       setDetailData(data);
+
+      const {
+        data: { results },
+      } = await movieApi.video(id);
+      setVideoKey(results.length === 0 ? null : results[0].key);
+      // console.log(await movieApi.video(id));
+
+      setLoading(false);
     };
     movieData();
-    setLoading(false);
   }, []);
-  // console.log(detailData);
+  console.log(videoKey);
 
   return (
     <Section>
@@ -71,25 +88,39 @@ export const Detail = () => {
       ) : (
         <>
           {detailData && (
-            <DetailContainer>
-              <Bg
-                style={{
-                  background: `url(${MOVIE_URL}${detailData?.backdrop_path}) no-repeat center / cover`,
-                }}
-              />
+            <>
+              <DetailContainer>
+                <Bg
+                  style={{
+                    background: `url(${MOVIE_URL}${detailData?.backdrop_path}) no-repeat center / cover`,
+                  }}
+                />
 
-              <Con>
-                <Title>{detailData?.title}</Title>
-                <Items>{detailData?.release_date}</Items>
-                <Items>{detailData?.runtime} 분</Items>
-                <Genres>
-                  {detailData?.genres.map((genre) => (
-                    <li key={genre.id}>{genre?.name}</li>
-                  ))}
-                </Genres>
-                <Payload>{detailData?.overview}</Payload>
-              </Con>
-            </DetailContainer>
+                <Con>
+                  <Title>{detailData?.title}</Title>
+                  <Items>{detailData?.release_date}</Items>
+                  <Items>{detailData?.runtime} 분</Items>
+                  <Genres>
+                    {detailData?.genres.map((genre) => (
+                      <li key={genre.id}>{genre?.name}</li>
+                    ))}
+                  </Genres>
+                  <Payload>{detailData?.overview}</Payload>
+                </Con>
+              </DetailContainer>
+
+              {videoKey ? (
+                <VideoWrap>
+                  <Iframe
+                    src={`https://www.youtube.com/embed/${videoKey}`}
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  ></Iframe>
+                </VideoWrap>
+              ) : null}
+            </>
           )}
         </>
       )}
